@@ -1,0 +1,8 @@
+/* changing the size of the div for cardlist wrt the category list  */
+.container{
+    flex:5
+  }
+  
+  .title{
+    margin: 50px 0px;
+  }
