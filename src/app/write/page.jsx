@@ -12,54 +12,56 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-//import { app } from "@/utils/firebase";
-import ReactQuill from "react-quill";
+import { app } from "@/utils/firebase";
+//import ReactQuill from "react-quill";
 
- const WritePage = () => {
-   const { status } = useSession();
-   const router = useRouter();
+const WritePage = () => {
 
-   const [open, setOpen] = useState(false);
-   const [file, setFile] = useState(null);
-   const [media, setMedia] = useState("");
-   const [value, setValue] = useState("");
-   const [title, setTitle] = useState("");
-   const [catSlug, setCatSlug] = useState("");
+  const { status } = useSession();
+  const ReactQuill=dynamic(()=>import ('react-quill'),{ssr:false});
+  const router = useRouter();
 
-//   useEffect(() => {
-//     const storage = getStorage(app);
-//     const upload = () => {
-//       const name = new Date().getTime() + file.name;
-//       const storageRef = ref(storage, name);
+  const [open, setOpen] = useState(false);
+  const [file, setFile] = useState(null);
+  const [media, setMedia] = useState("");
+  const [value, setValue] = useState("");
+  const [title, setTitle] = useState("");
+  const [catSlug, setCatSlug] = useState("");
 
-//       const uploadTask = uploadBytesResumable(storageRef, file);
+  useEffect(() => {
+    const storage = getStorage(app);
+    const upload = () => {
+      const name = new Date().getTime() + file.name;
+      const storageRef = ref(storage, name);
 
-//       uploadTask.on(
-//         "state_changed",
-//         (snapshot) => {
-//           const progress =
-//             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//           console.log("Upload is " + progress + "% done");
-//           switch (snapshot.state) {
-//             case "paused":
-//               console.log("Upload is paused");
-//               break;
-//             case "running":
-//               console.log("Upload is running");
-//               break;
-//           }
-//         },
-//         (error) => {},
-//         () => {
-//           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-//             setMedia(downloadURL);
-//           });
-//         }
-//       );
-//     };
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-//     file && upload();
-//   }, [file]);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {},
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setMedia(downloadURL);
+          });
+        }
+      );
+    };
+
+    file && upload();
+  }, [file]);
 
   if (status === "loading") {
     return <div className={styles.loading}>Loading...</div>;
@@ -69,31 +71,31 @@ import ReactQuill from "react-quill";
     router.push("/");
   }
 
-//   const slugify = (str) =>
-//     str
-//       .toLowerCase()
-//       .trim()
-//       .replace(/[^\w\s-]/g, "")
-//       .replace(/[\s_-]+/g, "-")
-//       .replace(/^-+|-+$/g, "");
+  const slugify = (str) =>
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
 
-//   const handleSubmit = async () => {
-//     const res = await fetch("/api/posts", {
-//       method: "POST",
-//       body: JSON.stringify({
-//         title,
-//         desc: value,
-//         img: media,
-//         slug: slugify(title),
-//         catSlug: catSlug || "style", //If not selected, choose the general category
-//       }),
-//     });
+  const handleSubmit = async () => {
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        desc: value,
+        img: media,
+        slug: slugify(title),
+        catSlug: catSlug || "style", //If not selected, choose the general category
+      }),
+    });
 
-//     if (res.status === 200) {
-//       const data = await res.json();
-//       router.push(`/posts/${data.slug}`);
-//     }
-//   };
+    if (res.status === 200) {
+      const data = await res.json();
+      router.push(`/posts/${data.slug}`);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -144,7 +146,7 @@ import ReactQuill from "react-quill";
           placeholder="Tell your story..."
         />
       </div>
-      <button className={styles.publish} >
+      <button className={styles.publish} onClick={handleSubmit}>
         Publish
       </button>
     </div>
