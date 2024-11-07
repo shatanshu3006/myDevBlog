@@ -5,7 +5,7 @@
 </br>
 </br>
 
-**The Schema for the Project Looks like this :**
+**The ER Diagram for the Project Looks like this :**
 </br>
 **Post is like the central Fact Table and the others are the Dimensions of that Fact Table: </br>
 Post : {user, comment, category}**
