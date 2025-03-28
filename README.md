@@ -1,3 +1,6 @@
+Check the Project's Git Diagram here: https://gitdiagram.com/shatanshu3006/myDevBlog
+
+
 **Flow of the Project:**</br> 
 <img width="836" alt="Screenshot 2024-09-18 at 1 05 06 PM" src="https://github.com/user-attachments/assets/a9558e66-afc0-45e2-b178-6a48b2deb3ff">
 </br>
